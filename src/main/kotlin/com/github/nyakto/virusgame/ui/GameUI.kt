@@ -32,18 +32,14 @@ class GameUI {
         0.95f to 0.5f,
         0.55f to 0.95f
     )
+    private var mouseX = 0.0
+    private var mouseY = 0.0
+    private var currentPlayer = 0
+    private var turns = 2
+    private var opponentInitialized = false
 
     fun init() {
-        field[0, 0] = GameField.CrossCell(0)
-        field[1, 1] = GameField.CrossCell(0)
-        field[2, 2] = GameField.CrossCell(0)
-        field[3, 3] = GameField.CrossCell(0)
-        field[4, 4] = GameField.CrossOutCell(0, 1)
-        field[5, 5] = GameField.CrossOutCell(0, 1)
-        field[6, 6] = GameField.CrossCell(1)
-        field[7, 7] = GameField.CrossCell(1)
-        field[8, 8] = GameField.CrossCell(1)
-        field[9, 9] = GameField.CrossCell(1)
+        field[0, 0] = GameField.CrossCell(currentPlayer)
         GLFWErrorCallback.createPrint(System.err).set()
         if (!GLFW.glfwInit()) {
             throw IllegalStateException("Unable to initialize GLFW")
@@ -62,6 +58,17 @@ class GameUI {
                 GLFW.glfwSetWindowShouldClose(window, true)
             }
         }
+        GLFW.glfwSetCursorPosCallback(windowHandle, { _, x, y ->
+            mouseX = x
+            mouseY = y
+        })
+        GLFW.glfwSetMouseButtonCallback(windowHandle, { _, button, action, _ ->
+            if (action == GLFW.GLFW_PRESS) {
+                val x = Math.ceil(mouseX / (cellSize + gap)).toInt() - 1
+                val y = Math.ceil(mouseY / (cellSize + gap)).toInt() - 1
+                onCellClick(x, y)
+            }
+        })
 
         MemoryStack.stackPush().use { stack ->
             val pWidth = stack.mallocInt(1)
@@ -87,6 +94,28 @@ class GameUI {
         GL11.glLoadIdentity()
         GL11.glOrtho(0.0, width.toDouble(), height.toDouble(), 0.0, 1.0, -1.0)
         GL11.glMatrixMode(GL11.GL_MODELVIEW)
+    }
+
+    fun onCellClick(x: Int, y: Int) {
+        val action = field.getCellAction(currentPlayer, x, y)
+        when (action) {
+            GameField.CellAction.INVALID -> return
+            GameField.CellAction.CROSS -> {
+                field[x, y] = GameField.CrossCell(currentPlayer)
+            }
+            GameField.CellAction.CROSS_OUT -> {
+                field[x, y] = GameField.CrossOutCell((currentPlayer + 1) % 2, currentPlayer)
+            }
+        }
+        if (--turns <= 0) {
+            currentPlayer = (currentPlayer + 1) % 2
+            turns = 3
+            if (!opponentInitialized) {
+                opponentInitialized = true
+                turns--
+                field[field.width - 1, field.height - 1] = GameField.CrossCell(currentPlayer)
+            }
+        }
     }
 
     fun release() {
@@ -174,9 +203,5 @@ class GameUI {
             prevX = nextX
             prevY = nextY
         }
-//        GL11.glBegin(GL11.GL_LINES)
-//        GL11.glVertex3f(x + width - horizontalPadding, y + verticalPadding, 0f)
-//        GL11.glVertex3f(x + horizontalPadding, y + height - verticalPadding, 0f)
-//        GL11.glEnd()
     }
 }

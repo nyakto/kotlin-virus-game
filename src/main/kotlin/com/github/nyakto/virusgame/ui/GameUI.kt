@@ -18,8 +18,15 @@ class GameUI {
     private var windowHandle: Long = 0
     private val backgroundColor = Color(.4f, .4f, 1f)
     private val cellColor = Color(.93f, .93f, .93f)
+    private val playerColors = arrayOf(
+        Color(1f, 0f, 0f),
+        Color(0f, 0f, 1f),
+        Color(0f, 1f, 0f)
+    )
 
     fun init() {
+        field[0, 0] = GameField.CrossCell(0)
+        field[field.width - 1, field.height - 1] = GameField.CrossCell(1)
         GLFWErrorCallback.createPrint(System.err).set()
         if (!GLFW.glfwInit()) {
             throw IllegalStateException("Unable to initialize GLFW")
@@ -53,6 +60,8 @@ class GameUI {
 
         GLFW.glfwMakeContextCurrent(windowHandle)
         GL.createCapabilities()
+        GL11.glEnable(GL11.GL_LINE_SMOOTH)
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST)
         GLFW.glfwSwapInterval(1)
 
         GLFW.glfwShowWindow(windowHandle)
@@ -92,6 +101,16 @@ class GameUI {
             (0 until field.height).forEach { y ->
                 val offsetY = gap + y * (gap + cellSize)
                 drawSquare(offsetX, offsetY, cellSize, cellSize, cellColor)
+                val cell = field[x, y]
+                when (cell) {
+                    is GameField.CrossCell -> {
+                        drawCross(offsetX, offsetY, cellSize, cellSize, playerColors[cell.crossPlayer])
+                    }
+                    is GameField.CrossOutCell -> {
+                        drawCross(offsetX, offsetY, cellSize, cellSize, playerColors[cell.crossPlayer])
+                        drawCrossOut(offsetX, offsetY, cellSize, cellSize, playerColors[cell.crossOutPlayer])
+                    }
+                }
             }
         }
     }
@@ -106,5 +125,23 @@ class GameUI {
         GL11.glVertex2f(x, y + height)
         GL11.glEnd()
         GL11.glPopMatrix()
+    }
+
+    private fun drawCross(x: Float, y: Float, width: Float, height: Float, color: Color) {
+        val horizontalPadding = width / 8
+        val verticalPadding = height / 8
+        GL11.glLineWidth(8f)
+        GL11.glColor3f(color.red, color.green, color.blue)
+        GL11.glBegin(GL11.GL_LINES)
+        GL11.glVertex3f(x + horizontalPadding, y + verticalPadding, 0f)
+        GL11.glVertex3f(x + width - horizontalPadding, y + height - verticalPadding, 0f)
+        GL11.glEnd()
+        GL11.glBegin(GL11.GL_LINES)
+        GL11.glVertex3f(x + width - horizontalPadding, y + verticalPadding, 0f)
+        GL11.glVertex3f(x + horizontalPadding, y + height - verticalPadding, 0f)
+        GL11.glEnd()
+    }
+
+    private fun drawCrossOut(x: Float, y: Float, width: Float, height: Float, color: Color) {
     }
 }

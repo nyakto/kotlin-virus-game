@@ -23,10 +23,27 @@ class GameUI {
         Color(0f, 0f, 1f),
         Color(0f, 1f, 0f)
     )
+    private val crossOutPoints = arrayOf(
+        0.1f to 0.2f,
+        0.7f to 0.1f,
+        0.15f to 0.5f,
+        0.8f to 0.25f,
+        0.4f to 0.7f,
+        0.95f to 0.5f,
+        0.55f to 0.95f
+    )
 
     fun init() {
         field[0, 0] = GameField.CrossCell(0)
-        field[field.width - 1, field.height - 1] = GameField.CrossCell(1)
+        field[1, 1] = GameField.CrossCell(0)
+        field[2, 2] = GameField.CrossCell(0)
+        field[3, 3] = GameField.CrossCell(0)
+        field[4, 4] = GameField.CrossOutCell(0, 1)
+        field[5, 5] = GameField.CrossOutCell(0, 1)
+        field[6, 6] = GameField.CrossCell(1)
+        field[7, 7] = GameField.CrossCell(1)
+        field[8, 8] = GameField.CrossCell(1)
+        field[9, 9] = GameField.CrossCell(1)
         GLFWErrorCallback.createPrint(System.err).set()
         if (!GLFW.glfwInit()) {
             throw IllegalStateException("Unable to initialize GLFW")
@@ -143,5 +160,23 @@ class GameUI {
     }
 
     private fun drawCrossOut(x: Float, y: Float, width: Float, height: Float, color: Color) {
+        GL11.glLineWidth(8f)
+        GL11.glColor3f(color.red, color.green, color.blue)
+        var prevX = x + crossOutPoints[0].first * width
+        var prevY = y + crossOutPoints[0].second * height
+        (1 until crossOutPoints.size).forEach { index ->
+            val nextX = x + crossOutPoints[index].first * width
+            val nextY = y + crossOutPoints[index].second * height
+            GL11.glBegin(GL11.GL_LINES)
+            GL11.glVertex3f(prevX, prevY, 0f)
+            GL11.glVertex3f(nextX, nextY, 0f)
+            GL11.glEnd()
+            prevX = nextX
+            prevY = nextY
+        }
+//        GL11.glBegin(GL11.GL_LINES)
+//        GL11.glVertex3f(x + width - horizontalPadding, y + verticalPadding, 0f)
+//        GL11.glVertex3f(x + horizontalPadding, y + height - verticalPadding, 0f)
+//        GL11.glEnd()
     }
 }

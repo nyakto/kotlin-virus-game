@@ -69,9 +69,15 @@ class GameWindow(
 
     fun loop() {
         while (!GLFW.glfwWindowShouldClose(windowHandle)) {
+            val startRenderTime = System.currentTimeMillis()
             render()
             GLFW.glfwSwapBuffers(windowHandle)
             GLFW.glfwPollEvents()
+            val endRenderTime = System.currentTimeMillis()
+            val delay = 16 + startRenderTime - endRenderTime
+            if (delay > 0) {
+                Thread.sleep(delay)
+            }
         }
     }
 

@@ -11,13 +11,13 @@ import org.lwjgl.system.MemoryUtil
 
 class GameUI {
     val field = GameField(10)
-    private val width = 640
+    private val width = 480
     private val height = 480
     private val gap = 2f
     private val cellSize = (height - (field.height + 1) * gap) / field.height
     private var windowHandle: Long = 0
-    private val backgroundColor = Color(0f, 0f, 0f)
-    private val cellColor = Color(1f, 1f, 1f)
+    private val backgroundColor = Color(.4f, .4f, 1f)
+    private val cellColor = Color(.93f, .93f, .93f)
 
     fun init() {
         GLFWErrorCallback.createPrint(System.err).set()

@@ -40,6 +40,7 @@ class GameUI {
 
     fun init() {
         field[0, 0] = GameField.CrossCell(currentPlayer)
+        field[field.width - 1, field.height - 1] = GameField.CrossCell((currentPlayer + 1) % 2)
         GLFWErrorCallback.createPrint(System.err).set()
         if (!GLFW.glfwInit()) {
             throw IllegalStateException("Unable to initialize GLFW")
@@ -113,7 +114,6 @@ class GameUI {
             if (!opponentInitialized) {
                 opponentInitialized = true
                 turns--
-                field[field.width - 1, field.height - 1] = GameField.CrossCell(currentPlayer)
             }
         }
     }

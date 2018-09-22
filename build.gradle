@@ -2,6 +2,7 @@ buildscript {
     ext.kotlin_version = '1.2.31'
     ext.junitVersion = "5.0.0"
     ext.junitPlatformVersion = "1.0.0"
+    ext.lwjglVersion = "3.0.0"
 
     repositories {
         mavenCentral()
@@ -30,9 +31,12 @@ dependencies {
 
     runtime "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
     runtime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
-}
 
-apply from: "junit5.gradle"
+    compile "org.lwjgl:lwjgl:${lwjglVersion}"
+//    compile "org.lwjgl:lwjgl-platform:${lwjglVersion}:natives-windows"
+//    compile "org.lwjgl:lwjgl-platform:${lwjglVersion}:natives-linux"
+    compile "org.lwjgl:lwjgl-platform:${lwjglVersion}:natives-osx"
+}
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

@@ -1,4 +1,4 @@
-package com.github.nyakto.virusgame
+package com.github.nyakto.virusgame.ui
 
 data class Color(
     val red: Float,

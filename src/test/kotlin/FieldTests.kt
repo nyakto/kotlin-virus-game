@@ -57,8 +57,11 @@ class FieldTests {
         val possibleMoves = mapOf(
             (2 to 0) to GameField.CellAction.CROSS,
             (3 to 0) to GameField.CellAction.CROSS,
+            (4 to 0) to GameField.CellAction.CROSS,
             (0 to 1) to GameField.CellAction.CROSS,
             (4 to 1) to GameField.CellAction.CROSS,
+            (0 to 2) to GameField.CellAction.CROSS_OUT,
+            (0 to 3) to GameField.CellAction.CROSS_OUT,
             (1 to 2) to GameField.CellAction.CROSS_OUT,
             (4 to 2) to GameField.CellAction.CROSS,
             (1 to 3) to GameField.CellAction.CROSS,
@@ -84,7 +87,9 @@ class FieldTests {
         val possibleMoves = mapOf(
             (0 to 1) to GameField.CellAction.CROSS,
             (1 to 1) to GameField.CellAction.CROSS_OUT,
-            (1 to 3) to GameField.CellAction.CROSS
+            (2 to 1) to GameField.CellAction.CROSS_OUT,
+            (1 to 3) to GameField.CellAction.CROSS,
+            (2 to 3) to GameField.CellAction.CROSS
         )
         (0 until field.width).forEach { x ->
             (0 until field.height).forEach { y ->

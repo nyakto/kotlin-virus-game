@@ -64,10 +64,14 @@ class GameField(
         }
 
         fun addNeighbors(x: Int, y: Int) {
+            addCheckedTask(x - 1, y - 1)
+            addCheckedTask(x, y - 1)
+            addCheckedTask(x + 1, y - 1)
             addCheckedTask(x - 1, y)
             addCheckedTask(x + 1, y)
-            addCheckedTask(x, y - 1)
+            addCheckedTask(x - 1, y + 1)
             addCheckedTask(x, y + 1)
+            addCheckedTask(x + 1, y + 1)
         }
 
         addNeighbors(x, y)

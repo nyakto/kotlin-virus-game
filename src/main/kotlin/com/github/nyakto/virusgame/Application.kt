@@ -1,12 +1,12 @@
 package com.github.nyakto.virusgame
 
-import com.github.nyakto.virusgame.ui.GameWindow
+import com.github.nyakto.virusgame.ui.GameUI
 
 
 object Application {
     @JvmStatic
     fun main(args: Array<String>) {
-        val gameWindow = GameWindow(640, 480)
+        val gameWindow = GameUI()
         gameWindow.init()
         gameWindow.loop()
         gameWindow.release()

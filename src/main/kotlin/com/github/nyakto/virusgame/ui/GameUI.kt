@@ -1,5 +1,6 @@
 package com.github.nyakto.virusgame.ui
 
+import com.github.nyakto.virusgame.logic.GameField
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
@@ -8,13 +9,15 @@ import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
 
-class GameWindow(
-    val width: Int,
-    val height: Int
-) {
+class GameUI {
+    val field = GameField(10)
+    private val width = 640
+    private val height = 480
+    private val gap = 2f
+    private val cellSize = (height - (field.height + 1) * gap) / field.height
     private var windowHandle: Long = 0
     private val backgroundColor = Color(0f, 0f, 0f)
-    private val fieldColor = Color(1f, 1f, 1f)
+    private val cellColor = Color(1f, 1f, 1f)
 
     fun init() {
         GLFWErrorCallback.createPrint(System.err).set()
@@ -84,7 +87,13 @@ class GameWindow(
     private fun render() {
         GL11.glClearColor(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0.0f)
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT or GL11.GL_DEPTH_BUFFER_BIT)
-        drawSquare(10f, 10f, 40f, 40f, fieldColor)
+        (0 until field.width).forEach { x ->
+            val offsetX = gap + x * (gap + cellSize)
+            (0 until field.height).forEach { y ->
+                val offsetY = gap + y * (gap + cellSize)
+                drawSquare(offsetX, offsetY, cellSize, cellSize, cellColor)
+            }
+        }
     }
 
     private fun drawSquare(x: Float, y: Float, width: Float, height: Float, color: Color) {

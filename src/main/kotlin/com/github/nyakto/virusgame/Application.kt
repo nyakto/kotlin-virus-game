@@ -114,7 +114,6 @@ object Application {
         GL11.glColor3f(color.red, color.green, color.blue)
 
         GL11.glPushMatrix()
-        GL11.glTranslatef(x, y, 0f)
         GL11.glBegin(GL11.GL_QUADS)
         GL11.glVertex2f(x, y)
         GL11.glVertex2f(x + width, y)

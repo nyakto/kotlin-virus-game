@@ -33,8 +33,8 @@ dependencies {
     runtime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
 
     compile "org.lwjgl:lwjgl:${lwjglVersion}"
-//    compile "org.lwjgl:lwjgl-platform:${lwjglVersion}:natives-windows"
-//    compile "org.lwjgl:lwjgl-platform:${lwjglVersion}:natives-linux"
+    compile "org.lwjgl:lwjgl-platform:${lwjglVersion}:natives-windows"
+    compile "org.lwjgl:lwjgl-platform:${lwjglVersion}:natives-linux"
     compile "org.lwjgl:lwjgl-platform:${lwjglVersion}:natives-osx"
 }
 

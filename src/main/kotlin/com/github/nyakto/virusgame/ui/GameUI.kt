@@ -63,7 +63,7 @@ class GameUI {
             mouseY = y
         })
         GLFW.glfwSetMouseButtonCallback(windowHandle, { _, button, action, _ ->
-            if (action == GLFW.GLFW_PRESS) {
+            if (action == GLFW.GLFW_PRESS && button == 0) {
                 val x = Math.ceil(mouseX / (cellSize + gap)).toInt() - 1
                 val y = Math.ceil(mouseY / (cellSize + gap)).toInt() - 1
                 onCellClick(x, y)
